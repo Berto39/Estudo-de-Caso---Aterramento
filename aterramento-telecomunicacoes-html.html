@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório: Aterramento para Torre de Telecomunicações em Terreno Rochoso</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #336699;
+            --accent-color: #FF9900;
+            --text-color: #333333;
+            --light-gray: #f5f5f5;
+            --border-color: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #fafafa;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .institution-data {
+            background-color: var(--light-gray);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .institution-data h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin: 20px 0 15px;
+            font-size: 1.4rem;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .figure figcaption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: 30px auto;
+            height: 400px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .methodology-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .methodology-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .references {
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .references h3 {
+            margin-top: 0;
+        }
+
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .references li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .references li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        .conclusion {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        .print-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media print {
+            .print-btn, .institution-form {
+                display: none;
+            }
+
+            body {
+                font-size: 12pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            header {
+                padding: 1rem 0;
+            }
+
+            .chart-container {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">Imprimir Relatório</button>
+
+    <header>
+        <div class="container">
+            <h1>Estudo de Caso: Sistema de Aterramento para Torre de Telecomunicações em Terreno Rochoso</h1>
+            <p>Análise técnica e soluções baseadas nas NBR 5410, 5419 e 15751</p>
+        </div>
+    </header>
+
+    <div class="container">
+       <div class="institution-data" id="institution-form">
+    <h2>Dados Institucionais</h2>
+    <div>
+        <div class="form-group">
+            <label for="instituicao">Instituição de Ensino:</label>
+            <input type="text" id="instituicao" value="PUC-GO" readonly>
+        </div>
+        <div class="form-group">
+            <label for="departamento">Departamento/Curso:</label>
+            <input type="text" id="departamento" value="Engenharia Elétrica" readonly>
+        </div>
+        <div class="form-group">
+            <label for="professor">Professor Responsável:</label>
+            <input type="text" id="professor" value="Dr. Antônio Marcos Medeiros" readonly>
+        </div>
+        <div class="form-group">
+            <label for="alunos">Alunos:</label>
+            <textarea id="alunos" rows="3" readonly>Arthur Ragazzo, Erik Vinícius e Pedro Lucas Berto</textarea>
+        </div>
+        <div class="form-group">
+            <label for="data">Data:</label>
+            <input type="text" id="data" value="08/04/2025" readonly>
+        </div>
+    </div>
+</div>
+
+        <section id="introducao">
+            <h2>1. Introdução</h2>
+            <p>Este estudo de caso aborda a avaliação e melhoria do sistema de aterramento de uma torre de telecomunicações instalada em terreno rochoso e elevado. As torres de telecomunicações são estruturas críticas que demandam proteção eficiente contra descargas atmosféricas, especialmente quando localizadas em áreas elevadas onde a incidência desses fenômenos é maior.</p>
+            
+            <p>Conforme estabelecido nas normas NBR 5410 (Instalações elétricas de baixa tensão), NBR 5419 (Proteção contra descargas atmosféricas) e NBR 15751 (Sistemas de aterramento de subestações), o sistema de aterramento é fundamental para garantir a proteção de pessoas e equipamentos, dissipando correntes de falta e de descargas atmosféricas para o solo com segurança.</p>
+            
+            <p>O estudo detalhará as características do cenário, os desafios específicos impostos pelo terreno rochoso, a metodologia de medição da resistência de aterramento mais adequada, o procedimento detalhado para realização das medições, a análise dos resultados e propostas de melhoria caso o sistema atual não atenda aos requisitos normativos.</p>
+        </section>
+
+        <section id="analise-cenario">
+            <h2>2. Análise do Cenário</h2>
+            
+            <h3>2.1 Características principais do local e da instalação</h3>
+            <p>O cenário em estudo apresenta as seguintes características relevantes:</p>
+            <ul>
+                <li>Torre de telecomunicações instalada em terreno elevado e predominantemente rochoso</li>
+                <li>Altitude elevada aumenta a exposição a descargas atmosféricas</li>
+                <li>Composição rochosa do solo com provável alta resistividade elétrica (estimada entre 3.000 e 10.000 Ω.m)</li>
+                <li>Dificuldade de penetração no solo para instalação de hastes convencionais</li>
+                <li>Necessidade crítica de sistema de proteção contra descargas atmosféricas (SPDA) eficiente</li>
+                <li>Equipamentos sensíveis de telecomunicação que requerem proteção contra surtos e transitórios</li>
+            </ul>
+            
+            <h3>2.2 Desafios específicos para medição de resistência de aterramento</h3>
+            <p>O cenário apresenta desafios específicos que afetam diretamente a medição da resistência de aterramento:</p>
+            <ul>
+                <li>Alta resistividade do solo rochoso dificulta obtenção de baixos valores de resistência de aterramento</li>
+                <li>Espaço limitado para disposição dos eletrodos de medição devido ao terreno acidentado</li>
+                <li>Possível presença de interferências eletromagnéticas dos próprios equipamentos da torre</li>
+                <li>Variações sazonais na umidade do solo podem afetar significativamente as medições</li>
+                <li>Dificuldade de garantir bom contato dos eletrodos auxiliares com o solo rochoso</li>
+            </ul>
+            
+            <div class="figure">
+                <svg width="800" height="500" viewBox="0 0 800 500">
+                    <!-- Céu -->
+                    <rect x="0" y="0" width="800" height="300" fill="#b3d9ff" />
+                    
+                    <!-- Terreno Rochoso -->
+                    <path d="M0,300 Q200,250 400,300 Q600,350 800,300 L800,500 L0,500 Z" fill="#a67c52" />
+                    
+                    <!-- Pedras/Rochas -->
+                    <ellipse cx="150" cy="320" rx="70" ry="40" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="350" cy="340" rx="90" ry="50" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="550" cy="320" rx="60" ry="35" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="700" cy="330" rx="40" ry="25" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="250" cy="350" rx="50" ry="30" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="450" cy="310" rx="40" ry="25" fill="#808080" stroke="#606060" stroke-width="2" />
+                    
+                    <!-- Base da Torre -->
+                    <rect x="385" y="290" width="30" height="10" fill="#404040" />
+                    
+                    <!-- Torre de Telecomunicações -->
+                    <path d="M400,100 L420,290 L380,290 Z" fill="none" stroke="#404040" stroke-width="5" />
+                    <path d="M390,100 L410,100 L410,50 L390,50 Z" fill="#404040" />
+                    <path d="M385,180 L415,180 L415,170 L385,170 Z" fill="#404040" />
+                    <path d="M380,240 L420,240 L420,230 L380,230 Z" fill="#404040" />
+                    
+                    <!-- Antena no topo -->
+                    <line x1="400" y1="50" x2="400" y2="20" stroke="#404040" stroke-width="3" />
+                    <circle cx="400" cy="15" r="5" fill="#ff3333" />
+                    
+                    <!-- Parabólicas -->
+                    <ellipse cx="420" cy="120" rx="15" ry="7" fill="none" stroke="#404040" stroke-width="2" transform="rotate(15, 420, 120)" />
+                    <ellipse cx="380" cy="150" rx="15" ry="7" fill="none" stroke="#404040" stroke-width="2" transform="rotate(-15, 380, 150)" />
+                    
+                    <!-- Raios -->
+                    <path d="M300,30 L395,60 L385,100 L340,80 L400,200" stroke="#ffff00" stroke-width="3" fill="none" stroke-dasharray="10,5" />
+                    <path d="M500,20 L410,70 L420,110 L470,90 L400,180" stroke="#ffff00" stroke-width="3" fill="none" stroke-dasharray="10,5" />
+                    
+                    <!-- Legenda -->
+                    <rect x="20" y="20" width="200" height="130" fill="rgba(255,255,255,0.7)" rx="5" />
+                    <text x="30" y="40" font-family="Arial" font-size="14" font-weight="bold">Características do Cenário:</text>
+                    <text x="30" y="65" font-family="Arial" font-size="12">• Terreno predominantemente rochoso</text>
+                    <text x="30" y="85" font-family="Arial" font-size="12">• Elevada altitude</text>
+                    <text x="30" y="105" font-family="Arial" font-size="12">• Alta exposição a descargas</text>
+                    <text x="30" y="125" font-family="Arial" font-size="12">• Dificuldade para hastes profundas</text>
+                    <text x="30" y="145" font-family="Arial" font-size="12">• Alta resistividade do solo</text>
+                </svg>
+                <figcaption>Figura 1: Representação do cenário - Torre de telecomunicações em terreno rochoso</figcaption>
+            </div>
+        </section>
+
+        <section id="metodo-medicao">
+            <h2>3. Seleção do Método de Medição</h2>
+            
+            <h3>3.1 Método escolhido e justificativa técnica</h3>
+            <p><strong>Método da Queda de Potencial com 4 Terminais (Método de Wenner modificado)</strong></p>
+            <p>Considerando as características do terreno e as recomendações da NBR 15751, o método da Queda de Potencial com 4 Terminais foi selecionado pelos seguintes motivos:</p>
+            <ul>
+                <li>Permite medições mais precisas em solos de alta resistividade, como terrenos rochosos</li>
+                <li>Reduz a influência da resistência de contato dos eletrodos auxiliares nas medições</li>
+                <li>Conforme NBR 15751, é adequado para medições em sistemas de aterramento já instalados</li>
+                <li>Possibilita medições sem desconexão do aterramento existente, mantendo a proteção ativa</li>
+                <li>Mitiga interferências de correntes parasitas no solo através da medição com frequência seletiva</li>
+            </ul>
+            
+            <h3>3.2 Alternativas consideradas e motivos para não selecioná-las</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Método</th>
+                            <th>Motivo para não selecionar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Método dos 3 Pontos (método da queda de potencial convencional)</td>
+                            <td>Alta resistência de contato dos eletrodos auxiliares com o solo rochoso; Exigiria maior distanciamento dos eletrodos auxiliares</td>
+                        </tr>
+                        <tr>
+                            <td>Método de Wenner clássico</td>
+                            <td>Mais adequado para medição de resistividade do solo antes da instalação; Não é ideal para avaliar um sistema de aterramento já existente</td>
+                        </tr>
+                        <tr>
+                            <td>Método da Resistência por Metro</td>
+                            <td>Inadequado para malhas de aterramento complexas necessárias em torres de telecomunicações; Não considera adequadamente a resistência mútua entre eletrodos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="procedimento-medicao">
+            <h2>4. Procedimento de Medição</h2>
+            
+            <h3>4.1 Detalhamento do arranjo dos eletrodos/equipamentos</h3>
+            <p>O arranjo para medição da resistência de aterramento utilizando o método da Queda de Potencial com 4 Terminais deve seguir os seguintes passos:</p>
+            <ol>
+                <li>Utilizar terrômetro digital de 4 terminais com filtro de frequência seletiva</li>
+                <li>Posicionar os eletrodos de corrente (C1 e C2) em linha reta:
+                    <ul>
+                        <li>C1 conectado ao sistema de aterramento da torre</li>
+                        <li>C2 a uma distância de 5D (onde D é a maior dimensão do sistema de aterramento)</li>
+                    </ul>
+                </li>
+                <li>Posicionar o eletrodo de potencial (P2) em diversos pontos entre C1 e C2:
+                    <ul>
+                        <li>Iniciar com P2 a 20% da distância entre C1 e C2</li>
+                        <li>Realizar medições incrementando 10% até atingir 80% da distância</li>
+                    </ul>
+                </li>
+                <li>Utilizar eletrodos auxiliares reforçados com hastes de maior diâmetro ou múltiplos eletrodos em paralelo para melhorar o contato com o solo rochoso</li>
+                <li>Aplicar solução condutora (água com sal) ao redor dos eletrodos auxiliares para reduzir a resistência de contato</li>
+            </ol>
+            
+            <div class="methodology-diagram">
+                <svg width="800" height="400" viewBox="0 0 800 400">
+                    <!-- Terreno -->
+                    <rect x="0" y="200" width="800" height="100" fill="#d9c2a3" />
+                    
+                    <!-- Rochas no terreno -->
+                    <ellipse cx="150" cy="220" rx="30" ry="20" fill="#808080" />
+                    <ellipse cx="350" cy="230" rx="40" ry="25" fill="#808080" />
+                    <ellipse cx="650" cy="225" rx="35" ry="20" fill="#808080" />
+                    
+                    <!-- Base da Torre -->
+                    <rect x="50" y="190" width="30" height="10" fill="#404040" />
+                    
+                    <!-- Torre simplificada -->
+                    <polygon points="65,100 80,190 50,190" fill="none" stroke="#404040" stroke-width="2" />
+                    <rect x="60" y="80" width="10" height="20" fill="#404040" />
+                    
+                    <!-- Terrômetro -->
+                    <rect x="400" y="150" width="60" height="40" fill="#4169E1" stroke="#000" stroke-width="1" />
+                    <text x="430" y="175" font-family="Arial" font-size="10" text-anchor="middle" fill="white">Terrômetro</text>
+                    
+                    <!-- Eletrodos -->
+                    <!-- C1/P1 (no sistema de aterramento) -->
+                    <circle cx="65" cy="200" r="8" fill="#ff4d4d" stroke="#000" stroke-width="1" />
+                    <text x="65" y="225" font-family="Arial" font-size="12" text-anchor="middle">C1/P1</text>
+                    
+                    <!-- P2 (pontos de medição) -->
+                    <circle cx="250" cy="200" r="8" fill="#33cc33" stroke="#000" stroke-width="1" />
+                    <text x="250" y="225" font-family="Arial" font-size="12" text-anchor="middle">P2(30%)</text>
+                    
+                    <circle cx="400" cy="200" r="8" fill="#33cc33" stroke="#000" stroke-width="1" />
+                    <text x="400" y="225" font-family="Arial" font-size="12" text-anchor="middle">P2(50%)</text>
+                    
+                    <circle cx="550" cy="200" r="8" fill="#33cc33" stroke="#000" stroke-width="1" />
+                    <text x="550" y="225" font-family="Arial" font-size="12" text-anchor="middle">P2(70%)</text>
+                    
+                    <!-- C2 (eletrodo auxiliar) -->
+                    <circle cx="700" cy="200" r="8" fill="#ff4d4d" stroke="#000" stroke-width="1" />
+                    <text x="700" y="225" font-family="Arial" font-size="12" text-anchor="middle">C2</text>
+                    
+                    <!-- Linha entre C1 e C2 para referência -->
+                    <line x1="65" y1="260" x2="700" y2="260" stroke="#000" stroke-width="1" stroke-dasharray="5,5" />
+                    <text x="382.5" y="280" font-family="Arial" font-size="12" text-anchor="middle">Distância entre C1 e C2 (5D)</text>
+                    
+                    <!-- Conexões ao terrômetro -->
+                    <path d="M65,200 C150,180 300,160 400,150" stroke="#ff4d4d" stroke-width="1.5" fill="none" />
+                    <path d="M250,200 C300,180 350,160 400,160" stroke="#33cc33" stroke-width="1.5" fill="none" />
+                    <path d="M400,200 C400,180 400,170 400,170" stroke="#33cc33" stroke-width="1.5" fill="none" stroke-dasharray="3,3" />
+                    <path d="M550,200 C500,180 450,160 430,170" stroke="#33cc33" stroke-width="1.5" fill="none" stroke-dasharray="3,3" />
+                    <path d="M700,200 C600,180 500,160 460,170" stroke="#ff4d4d" stroke-width="1.5" fill="none" />
+                    
+                    <!-- Legenda -->
+                    <rect x="50" y="300" width="700" height="80" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                    <text x="60" y="320" font-family="Arial" font-size="14" font-weight="bold">Legenda:</text>
+                    <circle cx="70" cy="340" r="6" fill="#ff4d4d" />
+                    <text x="85" y="345" font-family="Arial" font-size="12">Eletrodos de corrente (C1, C2)</text>
+                    <circle cx="270" cy="340" r="6" fill="#33cc33" />
+                    <text x="285" y="345" font-family="Arial" font-size="12">Eletrodo de potencial (P2) - medições a 30%, 50% e 70% da distância</text>
+                    <text x="60" y="370" font-family="Arial" font-size="12">A medição da resistência é feita entre C1/P1 e P2, com corrente injetada entre C1 e C2</text>
+                </svg>
+                <figcaption>Figura 2: Diagrama esquemático do método da queda de potencial com 4 terminais</figcaption>
+            </div>
+            
+            <h3>4.2 Precauções necessárias para garantir a confiabilidade das medições</h3>
+            <p>Para garantir medições precisas e confiáveis, é necessário adotar as seguintes precauções:</p>
+            <ul>
+                <li>Realizar medições em dias sem previsão de tempestades para evitar interferências</li>
+                <li>Desconectar temporariamente equipamentos eletrônicos sensíveis, mantendo apenas o aterramento de proteção</li>
+                <li>Verificar ausência de cabos subterrâneos na área de teste que possam influenciar as medições</li>
+                <li>Utilizar cabos de teste com isolamento reforçado e bem separados para evitar acoplamento</li>
+                <li>Realizar medições em diferentes épocas do ano para avaliar variações sazonais</li>
+                <li>Garantir que os cabos de teste estejam esticados e não formem laços que possam criar induções</li>
+            </ul>
+        </section>
+
+        <section id="analise-resultados">
+            <h2>5. Análise de Resultados</h2>
+            
+            <h3>5.1 Como interpretar os dados obtidos</h3>
+            <p>A interpretação adequada dos dados obtidos na medição é fundamental para determinar corretamente a resistência de aterramento do sistema. O procedimento recomendado é:</p>
+            <ul>
+                <li>Plotar um gráfico da resistência medida versus a posição relativa do eletrodo P2</li>
+                <li>Identificar a região de "platô" no gráfico onde a resistência se mantém aproximadamente constante</li>
+                <li>O valor médio nessa região representa a resistência de aterramento do sistema</li>
+                <li>Conforme NBR 5419 e 5410, para torres de telecomunicações com equipamentos sensíveis, buscar resistência de aterramento ≤ 5 ohms</li>
+                <li>Analisar a variação percentual entre medições consecutivas (variações < 5% indicam maior confiabilidade)</li>
+            </ul>
+            
+            <div class="chart-container">
+                <canvas id="quedaPotencialChart"></canvas>
+            </div>
+            <p class="figure-caption" style
+            <p class="figure-caption" style="text-align: center;">Figura 3: Gráfico de análise do método da queda de potencial</p>
+            
+            <h3>5.2 Possíveis fontes de erro e como minimizá-las</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fonte de Erro</th>
+                            <th>Como Minimizar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Resistência de contato dos eletrodos auxiliares</td>
+                            <td>Utilizar solução condutora ao redor dos eletrodos; Usar múltiplos eletrodos em paralelo</td>
+                        </tr>
+                        <tr>
+                            <td>Interferências eletromagnéticas externas</td>
+                            <td>Usar terrômetro com filtro de frequências; Realizar medições em horários com menor atividade eletromagnética</td>
+                        </tr>
+                        <tr>
+                            <td>Correntes parasitas no solo</td>
+                            <td>Evitar proximidade com linhas de transmissão; Utilizar frequência de medição diferente da frequência da rede</td>
+                        </tr>
+                        <tr>
+                            <td>Disposição inadequada dos eletrodos</td>
+                            <td>Seguir rigorosamente o procedimento de posicionamento descrito; Verificar alinhamento dos eletrodos</td>
+                        </tr>
+                        <tr>
+                            <td>Variações na umidade do solo</td>
+                            <td>Realizar medições em diferentes condições climáticas; Considerar o pior cenário (solo mais seco)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="solucoes-propostas">
+            <h2>6. Soluções Propostas para Melhoria do Sistema</h2>
+            
+            <h3>6.1 Técnicas de melhoria do aterramento em solos rochosos</h3>
+            <p>Para melhorar o sistema de aterramento em terrenos rochosos, são propostas as seguintes técnicas:</p>
+            <ul>
+                <li><strong>Malha de aterramento superficial expandida:</strong> Aumentar a área de contato com o solo através de condutores horizontais formando uma malha mais extensa</li>
+                <li><strong>Uso de condutores de maior seção:</strong> Utilizar condutores com seção mínima de 50mm² em cobre nu para garantir maior dispersão da corrente</li>
+                <li><strong>Tratamento químico do solo:</strong> Aplicação de gel condutivo ou compostos químicos que reduzam a resistividade do solo nas proximidades dos eletrodos</li>
+                <li><strong>Sistema de hastes profundas em fendas ou perfurações:</strong> Identificar fendas naturais ou realizar perfurações para instalação de hastes mais profundas</li>
+                <li><strong>Uso de materiais condutivos ao redor dos eletrodos:</strong> Utilização de concreto condutivo (concreto com aditivos que melhoram condutividade)</li>
+                <li><strong>Eletrodos naturais:</strong> Integração de estruturas metálicas da própria fundação da torre ao sistema de aterramento</li>
+            </ul>
+            
+            <h3>6.2 Análise comparativa das soluções propostas</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Técnica</th>
+                            <th>Eficácia</th>
+                            <th>Custo relativo</th>
+                            <th>Complexidade de implementação</th>
+                            <th>Durabilidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Malha de aterramento expandida</td>
+                            <td>Alta</td>
+                            <td>Médio</td>
+                            <td>Média</td>
+                            <td>Alta (>20 anos)</td>
+                        </tr>
+                        <tr>
+                            <td>Condutores de maior seção</td>
+                            <td>Média</td>
+                            <td>Médio</td>
+                            <td>Baixa</td>
+                            <td>Alta (>25 anos)</td>
+                        </tr>
+                        <tr>
+                            <td>Tratamento químico do solo</td>
+                            <td>Alta</td>
+                            <td>Baixo</td>
+                            <td>Baixa</td>
+                            <td>Média (requer manutenção periódica)</td>
+                        </tr>
+                        <tr>
+                            <td>Hastes profundas em perfurações</td>
+                            <td>Muito Alta</td>
+                            <td>Alto</td>
+                            <td>Alta</td>
+                            <td>Alta (>25 anos)</td>
+                        </tr>
+                        <tr>
+                            <td>Concreto condutivo</td>
+                            <td>Alta</td>
+                            <td>Médio-Alto</td>
+                            <td>Média</td>
+                            <td>Alta (>30 anos)</td>
+                        </tr>
+                        <tr>
+                            <td>Integração de eletrodos naturais</td>
+                            <td>Média-Alta</td>
+                            <td>Baixo</td>
+                            <td>Baixa</td>
+                            <td>Alta (vida útil da estrutura)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>6.3 Esquema da solução recomendada</h3>
+            <p>Com base na análise comparativa, recomenda-se uma abordagem combinada utilizando múltiplas técnicas:</p>
+            
+            <div class="figure">
+                <svg width="800" height="500" viewBox="0 0 800 500">
+                    <!-- Terreno Rochoso e Céu-->
+                    <rect x="0" y="0" width="800" height="150" fill="#b3d9ff" />
+                    <path d="M0,150 Q200,130 400,150 Q600,170 800,150 L800,500 L0,500 Z" fill="#a67c52" />
+                    
+                    <!-- Rochas -->
+                    <ellipse cx="150" cy="200" rx="50" ry="30" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="380" cy="220" rx="70" ry="40" fill="#808080" stroke="#606060" stroke-width="2" />
+                    <ellipse cx="600" cy="190" rx="60" ry="35" fill="#808080" stroke="#606060" stroke-width="2" />
+                    
+                    <!-- Torre -->
+                    <path d="M400,70 L420,150 L380,150 Z" fill="none" stroke="#404040" stroke-width="3" />
+                    <rect x="385" y="150" width="30" height="10" fill="#404040" />
+                    
+                    <!-- Malha de Aterramento (representação simplificada) -->
+                    <path d="M300,160 L500,160 L500,300 L300,300 Z" fill="none" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    <path d="M300,160 L500,300" fill="none" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    <path d="M300,300 L500,160" fill="none" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    <path d="M400,160 L400,300" fill="none" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    <path d="M300,230 L500,230" fill="none" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    
+                    <!-- Hastes Profundas em Perfurações -->
+                    <line x1="300" y1="160" x2="300" y2="400" stroke="#CC6600" stroke-width="4" />
+                    <line x1="500" y1="160" x2="500" y2="400" stroke="#CC6600" stroke-width="4" />
+                    <line x1="300" y1="300" x2="300" y2="450" stroke="#CC6600" stroke-width="4" />
+                    <line x1="500" y1="300" x2="500" y2="450" stroke="#CC6600" stroke-width="4" />
+                    
+                    <!-- Tratamento Químico (representação esquemática) -->
+                    <circle cx="300" cy="400" r="30" fill="rgba(0,128,0,0.3)" />
+                    <circle cx="500" cy="400" r="30" fill="rgba(0,128,0,0.3)" />
+                    <circle cx="300" cy="450" r="30" fill="rgba(0,128,0,0.3)" />
+                    <circle cx="500" cy="450" r="30" fill="rgba(0,128,0,0.3)" />
+                    
+                    <!-- Concreto Condutivo -->
+                    <rect x="370" y="150" width="60" height="30" fill="rgba(128,128,128,0.6)" />
+                    
+                    <!-- Legenda -->
+                    <rect x="550" y="300" width="220" height="180" fill="rgba(255,255,255,0.8)" rx="5" />
+                    <text x="560" y="320" font-family="Arial" font-size="14" font-weight="bold">Solução Combinada:</text>
+                    <line x1="560" y1="340" x2="580" y2="340" stroke="#CC6600" stroke-width="3" stroke-dasharray="5,3" />
+                    <text x="590" y="345" font-family="Arial" font-size="12">Malha de aterramento expandida</text>
+                    <line x1="560" y1="370" x2="580" y2="370" stroke="#CC6600" stroke-width="4" />
+                    <text x="590" y="375" font-family="Arial" font-size="12">Hastes profundas em perfurações</text>
+                    <circle cx="570" cy="400" r="10" fill="rgba(0,128,0,0.3)" />
+                    <text x="590" y="405" font-family="Arial" font-size="12">Tratamento químico do solo</text>
+                    <rect x="560" y="425" width="20" height="15" fill="rgba(128,128,128,0.6)" />
+                    <text x="590" y="435" font-family="Arial" font-size="12">Concreto condutivo na base</text>
+                    <text x="560" y="460" font-family="Arial" font-size="12" font-style="italic">Resistência esperada: < 5 ohms</text>
+                </svg>
+                <figcaption>Figura 4: Esquema da solução combinada recomendada para terreno rochoso</figcaption>
+            </div>
+        </section>
+
+        <section id="conclusao">
+            <h2>7. Conclusão</h2>
+            <div class="conclusion">
+                <p>Este estudo de caso apresentou uma análise aprofundada do sistema de aterramento para uma torre de telecomunicações em terreno rochoso, abordando os desafios específicos da medição e propondo soluções técnicas para melhorar a eficiência do sistema.</p>
+                
+                <p>Concluiu-se que o método da Queda de Potencial com 4 Terminais é o mais adequado para medição da resistência de aterramento neste tipo de terreno, proporcionando resultados mais precisos e confiáveis, mesmo em condições de alta resistividade do solo.</p>
+                
+                <p>A solução recomendada para melhoria do sistema envolve uma abordagem combinada, utilizando diferentes técnicas complementares, como malha de aterramento expandida, hastes profundas em perfurações estratégicas, tratamento químico do solo nas áreas críticas e uso de concreto condutivo na base da torre.</p>
+                
+                <p>Esta abordagem integrada permite atender aos requisitos estabelecidos pelas normas NBR 5410, 5419 e 15751, garantindo uma resistência de aterramento inferior a 5 ohms, essencial para a proteção adequada dos equipamentos sensíveis e para a segurança da instalação contra descargas atmosféricas.</p>
+                
+                <p>O estudo também evidencia a importância de medições periódicas do sistema, especialmente considerando as variações sazonais na umidade do solo, para garantir que a resistência de aterramento se mantenha dentro dos limites aceitáveis ao longo do tempo.</p>
+            </div>
+        </section>
+
+        <section id="referencias">
+            <h2>8. Referências</h2>
+            <div class="references">
+                <ul>
+                    <li>ABNT NBR 5410:2004 - Instalações elétricas de baixa tensão.</li>
+                    <li>ABNT NBR 5419:2015 - Proteção contra descargas atmosféricas (partes 1, 2, 3 e 4).</li>
+                    <li>ABNT NBR 15751:2013 - Sistemas de aterramento de subestações.</li>
+                    <li>KINDERMANN, G.; CAMPAGNOLO, J. M. Aterramento Elétrico. 6ª ed. Porto Alegre: Sagra Luzzatto, 2011.</li>
+                    <li>VISACRO FILHO, S. Aterramentos Elétricos: Conceitos básicos, técnicas de medição e instrumentação, filosofias de aterramento. São Paulo: Artliber, 2012.</li>
+                    <li>IEEE Std 81-2012 - IEEE Guide for Measuring Earth Resistivity, Ground Impedance, and Earth Surface Potentials of a Grounding System.</li>
+                    <li>IEEE Std 142-2007 - IEEE Recommended Practice for Grounding of Industrial and Commercial Power Systems.</li>
+                    <li>MOTOROLA R56 - Standards and Guidelines for Communication Sites.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Função para atualizar os dados institucionais
+        function atualizarDados() {
+            // Aqui pode-se adicionar lógica para salvar os dados em localStorage ou outro meio
+            alert("Dados institucionais atualizados com sucesso!");
+        }
+
+        // Dados para o gráfico da queda de potencial
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('quedaPotencialChart').getContext('2d');
+            
+            const quedaPotencialChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'],
+                    datasets: [
+                        {
+                            label: 'Resistência Medida (Ohms)',
+                            data: [42, 24, 18, 12, 10, 9.8, 10.2, 16, 32],
+                            borderColor: '#003366',
+                            backgroundColor: 'rgba(51, 102, 153, 0.2)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#003366'
+                        },
+                        {
+                            label: 'Região do Platô',
+                            data: [null, null, null, 12, 10, 9.8, 10.2, null, null],
+                            borderColor: '#FF9900',
+                            backgroundColor: 'rgba(255, 153, 0, 0.4)',
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Curva do Método da Queda de Potencial',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return 'Posição relativa: ' + context[0].label;
+                                },
+                                label: function(context) {
+                                    return 'Resistência: ' + context.raw + ' Ω';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Resistência (Ohms)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Posição Relativa do Eletrodo P2',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            box1: {
+                                type: 'box',
+                                xMin: 3,
+                                xMax: 6,
+                                backgroundColor: 'rgba(255, 153, 0, 0.2)',
+                                borderColor: '#FF9900',
+                                borderWidth: 1
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
